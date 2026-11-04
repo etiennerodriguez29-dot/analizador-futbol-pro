@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analizador de Fútbol PRO</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#0b1220;color:#f1f5f9;
+ font-family:Arial,sans-serif
+}
+header{
+ background:#111e31;padding:22px 15px;
+ text-align:center;border-bottom:2px solid #22c55e
+}
+h1{margin:0;color:#4ade80;font-size:26px}
+header p{color:#94a3b8}
+main{max-width:1100px;margin:auto;padding:18px}
+.panel{
+ background:#172338;border:1px solid #293b55;
+ border-radius:14px;padding:18px;margin-bottom:18px
+}
+h2{font-size:19px;margin-top:0}
+.grid{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:12px
+}
+@media(max-width:650px){
+ .grid{grid-template-columns:1fr}
+}
+button,select,input{
+ padding:12px;border-radius:9px;
+ border:1px solid #42526b;font-size:15px
+}
+button{
+ background:#16a34a;color:white;
+ cursor:pointer;font-weight:bold
+}
+button:hover{background:#15803d}
+button:disabled{opacity:.5;cursor:not-allowed}
+select,input{
+ background:#0f172a;color:white;width:100%
+}
+.stat{
+ background:#0f172a;border-radius:10px;
+ padding:14px;text-align:center
+}
+.stat strong{
+ display:block;color:#4ade80;
+ font-size:22px;margin-top:8px
+}
+.muted{color:#94a3b8;font-size:13px}
+.notice{
+ padding:13px;background:#253449;
+ border-radius:10px;color:#cbd5e1
+}
+footer{
+ text-align:center;padding:22px;color:#94a3b8
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>⚽ ANALIZADOR DE FÚTBOL PRO</h1>
+<p>Estadísticas · Pronósticos · Bet Builder</p>
+</header>
+
+<main>
+
+<section class="panel">
+<h2>🏆 Seleccionar competición</h2>
+<select id="liga">
+<option value="">Todas las competiciones</option>
+<option>Champions League</option>
+<option>Europa League</option>
+<option>Conference League</option>
+<option>Premier League</option>
+<option>LaLiga</option>
+<option>Serie A</option>
+<option>Bundesliga</option>
+<option>Ligue 1</option>
+<option>Liga Argentina</option>
+<option>Brasileirão</option>
+<option>Liga Chilena</option>
+</select>
+</section>
+
+<section class="panel">
+<h2>📅 Partidos del día</h2>
+<input type="date" id="fecha">
+<p class="muted">
+Los partidos se mostrarán cuando conectemos
+la fuente de datos.
+</p>
+<div id="partidos" class="notice">
+Sin datos conectados todavía.
+</div>
+</section>
+
+<section class="panel">
+<h2>📊 Análisis del partido</h2>
+<p id="encuentro" class="muted">
+Selecciona un partido cuando haya datos disponibles.
+</p>
+<div class="grid">
+<div class="stat">🏠 Victoria local<strong>—</strong></div>
+<div class="stat">🤝 Empate<strong>—</strong></div>
+<div class="stat">✈️ Victoria visitante<strong>—</strong></div>
+<div class="stat">🎯 Marcador probable<strong>—</strong></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>⚽ Mercados de goles</h2>
+<div class="grid">
+<div class="stat">Más de 1.5 goles<strong>—</strong></div>
+<div class="stat">Más de 2.5 goles<strong>—</strong></div>
+<div class="stat">Más de 3.5 goles<strong>—</strong></div>
+<div class="stat">Ambos equipos marcan<strong>—</strong></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>🚩 Córners y tarjetas</h2>
+<div class="grid">
+<div class="stat">Córners totales<strong>—</strong></div>
+<div class="stat">Córners por equipo<strong>—</strong></div>
+<div class="stat">Tarjetas totales<strong>—</strong></div>
+<div class="stat">Tarjetas por equipo<strong>—</strong></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>🎯 Remates</h2>
+<div class="grid">
+<div class="stat">Remates totales<strong>—</strong></div>
+<div class="stat">Remates a puerta<strong>—</strong></div>
+</div>
+</section>
+
+<section class="panel">
+<h2>👟 Estadísticas de jugadores</h2>
+<div class="notice">
+Próximamente: goles, asistencias,
+remates y tiros a puerta por jugador.
+</div>
+</section>
+
+<section class="panel">
+<h2>🎟️ Bet Builder PRO</h2>
+<p class="muted">
+Aquí construiremos combinadas con los
+mercados disponibles de cada partido.
+</p>
+<button disabled>Crear combinada (próximamente)</button>
+</section>
+
+<section class="panel">
+<h2>🔌 Estado de conexión</h2>
+<div id="estado" class="notice">
+Interfaz instalada. API pendiente de conexión.
+</div>
+</section>
+
+</main>
+
+<footer>
+Analizador de Fútbol PRO · Versión 1.0
+</footer>
+
+<script>
+const fecha = document.getElementById("fecha");
+const hoy = new Date();
+const local = new Date(
+ hoy.getTime() - hoy.getTimezoneOffset()*60000
+);
+fecha.value = local.toISOString().slice(0,10);
+
+document.getElementById("liga")
+ .addEventListener("change",()=>{
+  document.getElementById("partidos").textContent =
+   "Filtro preparado. Falta conectar la API.";
+ });
+
+fecha.addEventListener("change",()=>{
+ document.getElementById("partidos").textContent =
+  "Fecha seleccionada: " + fecha.value +
+  ". Falta conectar la API.";
+});
+</script>
+</body>
+</html>
